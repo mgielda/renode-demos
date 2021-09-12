@@ -23,6 +23,13 @@ jobs:
         run: |
           dotnet publish
 
+      - name: Test
+        run: |
+          env -i bin/Debug/net6.0/linux-x64/publish/renode-demos test > OUT
+          cat OUT
+          if [ "$(cat OUT | head -n 1)" != "0: test" ]; then exit 1; fi
+          if [ "$(cat OUT | tail -n 1)" != "Done." ]; then exit 1; fi
+
       - name: Save binary
         uses: actions/upload-artifact@v2
         if: always()
